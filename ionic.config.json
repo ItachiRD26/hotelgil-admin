@@ -1,0 +1,7 @@
+{
+  "name": "hotel-owner-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
