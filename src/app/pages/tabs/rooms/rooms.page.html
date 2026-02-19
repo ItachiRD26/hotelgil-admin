@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()">
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>HotelGil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadRooms()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="rooms-content">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingText="Desliza para actualizar"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Navegación de fecha -->
+  <div class="date-row">
+    <ion-button fill="clear" class="nav-btn" (click)="changeDate(-1)">
+      <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+    </ion-button>
+    <div class="date-center">
+      <div class="date-title">{{ getFormattedDate() }}</div>
+      @if (!isToday()) {
+        <ion-button size="small" fill="outline" class="today-btn" (click)="goToToday()">
+          Hoy
+        </ion-button>
+      }
+    </div>
+    <ion-button fill="clear" class="nav-btn" (click)="changeDate(1)">
+      <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-pill available">
+      <div class="stat-num">{{ getStatsCount('disponible') }}</div>
+      <div class="stat-label">Disponibles</div>
+    </div>
+    <div class="stat-pill reserved">
+      <div class="stat-num">{{ getStatsCount('reservada') }}</div>
+      <div class="stat-label">Reservadas</div>
+    </div>
+    <div class="stat-pill occupied">
+      <div class="stat-num">{{ getStatsCount('ocupada') }}</div>
+      <div class="stat-label">Ocupadas</div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filter-wrap">
+    <div class="filter-btns">
+      <button class="filter-btn" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">
+        Todas
+      </button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'disponible'" (click)="setFilter('disponible')">
+        Libres
+      </button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'reservada'" (click)="setFilter('reservada')">
+        Reservadas
+      </button>
+      <button class="filter-btn" [class.active]="selectedFilter === 'ocupada'" (click)="setFilter('ocupada')">
+        Ocupadas
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando habitaciones...</p>
+    </div>
+  }
+
+  <!-- Lista -->
+  @if (!loading) {
+    <ion-list class="rooms-list">
+      @for (room of filteredRooms; track room.roomNumber) {
+        <ion-item class="room-item status-{{ room.status }}" lines="none">
+          <div class="room-left">
+            <div class="room-number">
+              <span class="num">{{ room.roomNumber }}</span>
+              <span class="type">{{ room.roomType }}</span>
+            </div>
+          </div>
+          @if (room.status !== 'disponible' && room.reservation) {
+            <div class="room-middle">
+              <div class="guest-label">Huésped</div>
+              <div class="guest-name">{{ room.reservation.guestName }}</div>
+            </div>
+          }
+          <div class="room-right" slot="end">
+            <ion-badge class="status-badge" [color]="getStatusColor(room.status)">
+              {{ getStatusText(room.status) }}
+            </ion-badge>
+          </div>
+        </ion-item>
+      }
+      @if (filteredRooms.length === 0) {
+        <div class="empty-state">
+          <p>No hay habitaciones en esta categoría</p>
+        </div>
+      }
+    </ion-list>
+  }
+
+  <div class="last-update">
+    Actualizado: {{ lastUpdate | date:'HH:mm' }}
+  </div>
+
+</ion-content>

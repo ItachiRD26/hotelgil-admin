@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()">
+        <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Ingresos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadRevenue()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="revenue-content">
+
+  <!-- Selector de mes con flechas — sin ion-select -->
+  <div class="month-selector">
+    <button class="arrow-btn" (click)="prevMonth()">&#8249;</button>
+    <div class="month-label">
+      <span class="month-name">{{ months[selectedMonth] }}</span>
+      <span class="year-name">{{ selectedYear }}</span>
+    </div>
+    <button class="arrow-btn" (click)="nextMonth()">&#8250;</button>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando ingresos...</p>
+    </div>
+  }
+
+  <!-- Datos -->
+  @if (!loading && revenue) {
+    <div class="revenue-cards">
+
+      <ion-card class="total-card">
+        <ion-card-header>
+          <ion-icon name="wallet-outline"></ion-icon>
+          <ion-card-title>Ingresos Totales</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="big-amount">RD${{ revenue.total | number:'1.0-0' }}</div>
+          <div class="period">{{ revenue.month }} {{ revenue.year }}</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="methods-card">
+        <ion-card-header>
+          <ion-icon name="card-outline"></ion-icon>
+          <ion-card-title>Métodos de Pago</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="payment-row">
+            <div class="pay-icon"><ion-icon name="cash-outline"></ion-icon></div>
+            <div class="pay-info">
+              <span class="pay-name">Efectivo</span>
+              <span class="pay-pct">{{ getPercentage(revenue.cash) }}%</span>
+            </div>
+            <div class="pay-amount">RD${{ revenue.cash | number:'1.0-0' }}</div>
+          </div>
+          <div class="payment-row">
+            <div class="pay-icon"><ion-icon name="card-outline"></ion-icon></div>
+            <div class="pay-info">
+              <span class="pay-name">Tarjeta</span>
+              <span class="pay-pct">{{ getPercentage(revenue.card) }}%</span>
+            </div>
+            <div class="pay-amount">RD${{ revenue.card | number:'1.0-0' }}</div>
+          </div>
+          <div class="payment-row">
+            <div class="pay-icon"><ion-icon name="swap-horizontal-outline"></ion-icon></div>
+            <div class="pay-info">
+              <span class="pay-name">Transferencia</span>
+              <span class="pay-pct">{{ getPercentage(revenue.transfer) }}%</span>
+            </div>
+            <div class="pay-amount">RD${{ revenue.transfer | number:'1.0-0' }}</div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="rooms-card">
+        <ion-card-header>
+          <ion-icon name="bed-outline"></ion-icon>
+          <ion-card-title>Habitaciones Vendidas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="big-amount">{{ revenue.totalRoomsSold }}</div>
+          <div class="period">Total del mes</div>
+          <div class="room-breakdown">
+            <div class="room-type">
+              <span class="rt-label">Sencilla</span>
+              <span class="rt-count">{{ revenue.sencillaCount }}</span>
+            </div>
+            <div class="room-type">
+              <span class="rt-label">Doble</span>
+              <span class="rt-count">{{ revenue.dobleCount }}</span>
+            </div>
+            <div class="room-type">
+              <span class="rt-label">Triple</span>
+              <span class="rt-count">{{ revenue.tripleCount }}</span>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="fiscal-card">
+        <ion-card-header>
+          <ion-icon name="document-text-outline"></ion-icon>
+          <ion-card-title>Facturas Fiscales</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="big-amount">{{ revenue.fiscalCount }}</div>
+          <div class="period">Facturas emitidas este mes</div>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  }
+
+  @if (!loading && revenue && revenue.total === 0) {
+    <div class="empty-state">
+      <ion-icon name="bar-chart-outline" style="font-size: 48px; color: #ccc;"></ion-icon>
+      <h3>Sin ingresos registrados</h3>
+      <p>{{ months[selectedMonth] }} {{ selectedYear }}</p>
+    </div>
+  }
+
+</ion-content>
