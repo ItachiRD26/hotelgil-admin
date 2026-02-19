@@ -15,6 +15,7 @@ export const HOTEL_ROOMS: Room[] = [
   { roomNumber: "104", roomType: "Triple", price: 2500 },
   { roomNumber: "105", roomType: "Sencilla", price: 1200 },
   { roomNumber: "106", roomType: "Sencilla", price: 1200 },
+  { roomNumber: "108", roomType: "Sencilla", price: 1200 },
   { roomNumber: "201", roomType: "Sencilla", price: 1200 },
   { roomNumber: "202", roomType: "Sencilla", price: 1200 },
   { roomNumber: "203", roomType: "Sencilla", price: 1200 },
@@ -34,4 +35,5 @@ export const HOTEL_ROOMS: Room[] = [
   { roomNumber: "217", roomType: "Sencilla", price: 1200 },
   { roomNumber: "218", roomType: "Sencilla", price: 1200 },
   { roomNumber: "219", roomType: "Sencilla", price: 1200 },
+  { roomNumber: "220", roomType: "Sencilla", price: 1200 },
 ];
