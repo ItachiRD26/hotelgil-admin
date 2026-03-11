@@ -35,5 +35,5 @@ export const HOTEL_ROOMS: Room[] = [
   { roomNumber: "217", roomType: "Sencilla", price: 1200 },
   { roomNumber: "218", roomType: "Sencilla", price: 1200 },
   { roomNumber: "219", roomType: "Sencilla", price: 1200 },
-  { roomNumber: "220", roomType: "Sencilla", price: 1200 },
+  { roomNumber: "120", roomType: "Sencilla", price: 1200 },
 ];
